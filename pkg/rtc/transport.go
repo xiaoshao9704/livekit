@@ -360,6 +360,18 @@ func newPeerConnection(
 	// so disable rid pause in SDP
 	se.SetIgnoreRidPauseForRecv(true)
 
+	// hearth patch 2: refresh the advertised external addresses per transport. `se` is a
+	// per-transport copy, so this overrides whatever NAT1To1 rules were baked in at startup
+	// without touching other transports. includeInternal=true keeps the host candidates so
+	// LAN peers still connect directly while remote peers use the external address.
+	if params.Config.ExternalIPs != nil {
+		if ips := params.Config.ExternalIPs(); len(ips) > 0 {
+			if err := rtcconfig.SetNAT1To1AddressRewriteRules(&se, ips, true); err != nil {
+				params.Logger.Warnw("failed to apply host-provided external IPs", err, "ips", ips)
+			}
+		}
+	}
+
 	// Change elliptic curve to improve connectivity
 	// https://github.com/pion/dtls/pull/474
 	se.SetDTLSEllipticCurves(elliptic.X25519, elliptic.P384, elliptic.P256)

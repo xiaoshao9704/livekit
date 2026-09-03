@@ -33,6 +33,9 @@ const (
 type WebRTCConfig struct {
 	rtcconfig.WebRTCConfig
 
+	// hearth patch 2: see config.RTCConfig.ExternalIPs.
+	ExternalIPs func() []string
+
 	BufferFactory *buffer.Factory
 	Receiver      ReceiverConfig
 	Publisher     DirectionConfig
@@ -82,6 +85,7 @@ func NewWebRTCConfig(conf *config.Config) (*WebRTCConfig, error) {
 
 	return &WebRTCConfig{
 		WebRTCConfig: *webRTCConfig,
+		ExternalIPs:  rtcConf.ExternalIPs,
 		Receiver: ReceiverConfig{
 			PacketBufferSizeVideo: rtcConf.PacketBufferSizeVideo,
 			PacketBufferSizeAudio: rtcConf.PacketBufferSizeAudio,

@@ -122,6 +122,12 @@ type RTCConfig struct {
 
 	TURNServers []TURNServer `yaml:"turn_servers,omitempty"`
 
+	// hearth patch 2: host-provided source of the external IPv4 addresses to advertise.
+	// Consulted every time a transport (PeerConnection) is created, so a changed public IP
+	// or port mapping reaches new sessions without a restart; nil keeps upstream behaviour
+	// (NAT1To1 rules frozen at startup from node_ip / use_external_ip). Not a YAML field.
+	ExternalIPs func() []string `yaml:"-"`
+
 	// EnableWarp turns on WARP = SPED (DTLS-in-STUN, saves DTLS round-trip) +
 	// SNAP (SCTP INIT in SDP, saves SCTP/data-channel init round-trip).
 	// Off by default; experimental.
