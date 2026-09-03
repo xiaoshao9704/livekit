@@ -384,7 +384,6 @@ func newPeerConnection(
 	}
 
 	if params.EnableWarp {
-		se.EnableSped(true)
 		se.EnableSctpSnap(true)
 	}
 
