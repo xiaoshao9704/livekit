@@ -362,11 +362,12 @@ func newPeerConnection(
 
 	// hearth patch 2: refresh the advertised external addresses per transport. `se` is a
 	// per-transport copy, so this overrides whatever NAT1To1 rules were baked in at startup
-	// without touching other transports. includeInternal=true keeps the host candidates so
-	// LAN peers still connect directly while remote peers use the external address.
+	// without touching other transports. Host-provided addresses replace local host
+	// candidates: multi-homed hosts can otherwise select a private/IPv6 path that passes the
+	// initial check but cannot sustain ICE consent through policy routing.
 	if params.Config.ExternalIPs != nil {
 		if ips := params.Config.ExternalIPs(); len(ips) > 0 {
-			if err := rtcconfig.SetNAT1To1AddressRewriteRules(&se, ips, true); err != nil {
+			if err := rtcconfig.SetNAT1To1AddressRewriteRules(&se, ips, false); err != nil {
 				params.Logger.Warnw("failed to apply host-provided external IPs", err, "ips", ips)
 			}
 		}
