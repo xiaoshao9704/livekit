@@ -22,7 +22,7 @@ require (
 	github.com/livekit/mageutil v0.0.0-20250511045019-0f1ff63f7731
 	github.com/livekit/mediatransportutil v0.0.0-20260821083140-f234b534b095
 	github.com/livekit/protocol v1.50.5-0.20260821144838-17c16cf496fd
-	github.com/livekit/psrpc v0.7.3
+	github.com/livekit/psrpc v0.7.5
 	github.com/mackerelio/go-osstat v0.2.8
 	github.com/magefile/mage v1.17.2
 	github.com/mitchellh/go-homedir v1.1.0
@@ -55,7 +55,7 @@ require (
 	go.uber.org/zap v1.28.0
 	golang.org/x/mod v0.38.0
 	golang.org/x/sync v0.22.0
-	google.golang.org/protobuf v1.36.11
+	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -153,7 +153,7 @@ require (
 	golang.org/x/tools v0.48.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260803160001-6ac0973c030d // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260803160001-6ac0973c030d // indirect
-	google.golang.org/grpc v1.83.0 // indirect
+	google.golang.org/grpc v1.83.1 // indirect
 )
 
 tool (
@@ -168,3 +168,5 @@ replace github.com/pion/webrtc/v4 => github.com/livekit/webrtc-pion/v4 v4.2.18-w
 replace github.com/pion/dtls/v3 => github.com/livekit/dtls/v3 v3.1.5-warp.1
 
 replace github.com/pion/ice/v4 => github.com/livekit/ice/v4 v4.4.0-warp.1
+
+replace github.com/livekit/protocol => github.com/xiaoshao9704/livekit-protocol v1.51.1-hearth.1

@@ -1,4 +1,4 @@
-//go:build !windows && !(darwin && !cgo)
+//go:build darwin && !cgo
 
 /*
  * Copyright 2023 LiveKit, Inc
@@ -18,39 +18,15 @@
 
 package prometheus
 
-import (
-	"runtime"
-	"sync"
+import "github.com/mackerelio/go-osstat/loadavg"
 
-	"github.com/mackerelio/go-osstat/cpu"
-	"github.com/mackerelio/go-osstat/loadavg"
-)
-
-var (
-	cpuStatsLock              sync.RWMutex
-	lastCPUTotal, lastCPUIdle uint64
-)
+// go-osstat 的 darwin CPU 实现只有 cgo 版，nocgo 构建下 cpu.Get 不存在。
+// 与 node_windows.go 同样退化为空值：只影响 telemetry 指标，不影响转发。
 
 func getLoadAvg() (*loadavg.Stats, error) {
-	return loadavg.Get()
+	return &loadavg.Stats{}, nil
 }
 
 func getCPUStats() (cpuLoad float32, numCPUs uint32, err error) {
-	cpuInfo, err := cpu.Get()
-	if err != nil {
-		return
-	}
-
-	cpuStatsLock.Lock()
-	if lastCPUTotal > 0 && lastCPUTotal < cpuInfo.Total {
-		cpuLoad = 1 - float32(cpuInfo.Idle-lastCPUIdle)/float32(cpuInfo.Total-lastCPUTotal)
-	}
-
-	lastCPUTotal = cpuInfo.Total
-	lastCPUIdle = cpuInfo.Idle
-	cpuStatsLock.Unlock()
-
-	numCPUs = uint32(runtime.NumCPU())
-
-	return
+	return 1, 1, nil
 }
