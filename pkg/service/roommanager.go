@@ -1132,6 +1132,13 @@ func (r *RoomManager) iceServersForParticipant(apiKey string, participant types.
 		}
 	}
 
+	if cs := rtcConf.ClientSTUNServers; cs != nil {
+		if len(*cs) > 0 {
+			iceServers = append(iceServers, iceServerForStunServers(*cs))
+		}
+		return iceServers // explicit: never fall back to DefaultStunServers
+	}
+
 	if len(rtcConf.STUNServers) > 0 {
 		hasSTUN = true
 		iceServers = append(iceServers, iceServerForStunServers(r.config.RTC.STUNServers))

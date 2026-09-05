@@ -128,6 +128,11 @@ type RTCConfig struct {
 	// (NAT1To1 rules frozen at startup from node_ip / use_external_ip). Not a YAML field.
 	ExternalIPs func() []string `yaml:"-"`
 
+	// hearth patch 4: explicit STUN list to advertise to clients. nil keeps upstream behaviour
+	// (fall back to DefaultStunServers when nothing else is configured); non-nil is authoritative,
+	// and an empty slice means "advertise no STUN at all". Not a YAML field.
+	ClientSTUNServers *[]string `yaml:"-"`
+
 	// EnableWarp turns on WARP = SPED (DTLS-in-STUN, saves DTLS round-trip) +
 	// SNAP (SCTP INIT in SDP, saves SCTP/data-channel init round-trip).
 	// Off by default; experimental.
